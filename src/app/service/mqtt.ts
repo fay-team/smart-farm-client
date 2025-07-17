@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import mqtt from 'mqtt';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,10 @@ export class MqttService {
   private client: mqtt.MqttClient;
 
   constructor() {
-    this.client = mqtt.connect('wss://80785adbebb340c589cfbfb887da3259.s1.eu.hivemq.cloud:8884/mqtt', {
-      username: 'rajuraju',
-      password: 'Raju19857',
-      protocol: 'wss'
+    this.client = mqtt.connect(environment.mqtt.brokerUrl, {
+      username: environment.mqtt.username,
+      password: environment.mqtt.password,
+      protocol: environment.mqtt.protocol
     });
 
     this.client.on('connect', () => {

@@ -1,8 +1,37 @@
-<h2>สั่งงานอุปกรณ์ (ผ่าน HiveMQ)</h2>
+<div class="farm-control-card">
+  <h2 class="title">🌱 Smart Farm Controller</h2>
+  <p style="color: #718096; margin-bottom: 25px; font-size: 1rem;">
+    ควบคุมอุปกรณ์ในฟาร์มอัจฉริยะผ่าน MQTT
+  </p>
 
-<input
-  [(ngModel)]="command"
-  placeholder="เช่น 20:30 on หรือ 5m off"
-  style="width: 300px;"
-/>
-<button (click)="send()">ส่งคำสั่ง</button>
+  <div class="input-group">
+    <input
+      class="command-input"
+      [(ngModel)]="command"
+      placeholder="ตัวอย่าง: 20:30 on หรือ 5s off หรือ 5m on"
+      (keydown.enter)="send()"
+    />
+    <button class="send-button" (click)="send()">
+      <span class="icon">📡</span>
+      ส่งคำสั่ง
+    </button>
+  </div>
+
+  <div style="margin-top: 20px; font-size: 0.9rem; color: #718096;">
+    📋 รูปแบบคำสั่ง: เวลา + สถานะ (เช่น 08:30 on, 5s off, 5m on, 2h off)
+  </div>
+</div>
+
+<!-- Popup Notification - อยู่นอก card เพื่อให้ relative กับหน้าจอ -->
+<div
+  *ngIf="showNotification"
+  class="notification"
+  [ngClass]="{'success': notificationType === 'success', 'error': notificationType === 'error'}"
+>
+  <div class="notification-content">
+    <span class="notification-icon">
+      {{ notificationType === 'success' ? '✅' : '❌' }}
+    </span>
+    <span class="notification-text">{{ notificationMessage }}</span>
+  </div>
+</div>
