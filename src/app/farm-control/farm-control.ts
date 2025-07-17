@@ -13,24 +13,26 @@ import { CommonModule } from '@angular/common';
 })
 export class FarmControl {
   command = '';
+  timeInput = '';
+  selectedAction: 'on' | 'off' = 'on';
   showNotification = false;
   notificationMessage = '';
   notificationType: 'success' | 'error' = 'success';
 
   constructor(private mqttService: MqttService) {}
 
-  private isValidFormat(command: string): boolean {
+  private isValidTimeFormat(time: string): boolean {
     // รูปแบบที่ยอมรับ:
-    // 1. เวลา (HH:MM) + on/off
-    // 2. จำนวน + s/m/h + on/off
-    // 3. จำนวน + s/m/h (โดยไม่ต้องมี on/off)
-    const timePattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]\s+(on|off)$/i;
-    const durationWithStatePattern = /^\d+[smh]\s+(on|off)$/i;
-    const durationOnlyPattern = /^\d+[smh]$/i;
+    // 1. เวลา (HH:MM)
+    // 2. จำนวน + s/m/h
+    // 3. ตัวเลขเปล่าๆ (จะถือเป็นนาที)
+    const timePattern = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    const durationPattern = /^\d+[smh]$/i;
+    const numberOnlyPattern = /^\d+$/;
 
-    return timePattern.test(command.trim()) ||
-           durationWithStatePattern.test(command.trim()) ||
-           durationOnlyPattern.test(command.trim());
+    return timePattern.test(time.trim()) ||
+           durationPattern.test(time.trim()) ||
+           numberOnlyPattern.test(time.trim());
   }  private showPopup(message: string, type: 'success' | 'error') {
     this.notificationMessage = message;
     this.notificationType = type;
@@ -43,22 +45,29 @@ export class FarmControl {
   }
 
   send() {
-    const trimmedCommand = this.command.trim();
+    const trimmedTime = this.timeInput.trim();
 
-    if (!trimmedCommand) {
-      this.showPopup('กรุณาใส่คำสั่ง', 'error');
+    if (!trimmedTime) {
+      this.showPopup('กรุณาใส่เวลาหรือระยะเวลา', 'error');
       return;
     }
 
-    if (!this.isValidFormat(trimmedCommand)) {
-      this.showPopup('รูปแบบไม่ถูกต้อง! ใช้: HH:MM on/off หรือ 5s/5m/5h หรือ 5s on/off', 'error');
+    if (!this.isValidTimeFormat(trimmedTime)) {
+      this.showPopup('รูปแบบไม่ถูกต้อง! ใช้: HH:MM หรือ 5s/5m/5h หรือ 5 (นาที)', 'error');
       return;
     }
 
     try {
-      this.mqttService.publish('myhome/led', trimmedCommand);
+      // ถ้าเป็นตัวเลขเปล่าๆ ให้เพิ่ม 'm' (นาที) ให้อัตโนมัติ
+      let processedTime = trimmedTime;
+      if (/^\d+$/.test(trimmedTime)) {
+        processedTime = trimmedTime + 'm';
+      }
+
+      const fullCommand = `${processedTime} ${this.selectedAction}`;
+      this.mqttService.publish('myhome/led', fullCommand);
       this.showPopup('ส่งคำสั่งสำเร็จ! 📡', 'success');
-      this.command = '';
+      this.timeInput = '';
     } catch (error) {
       this.showPopup('เกิดข้อผิดพลาดในการส่งคำสั่ง', 'error');
     }

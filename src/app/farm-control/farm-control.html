@@ -4,21 +4,54 @@
     ควบคุมอุปกรณ์ในฟาร์มอัจฉริยะผ่าน MQTT
   </p>
 
-  <div class="input-group">
-    <input
-      class="command-input"
-      [(ngModel)]="command"
-      placeholder="ตัวอย่าง: 20:30 on หรือ 5s off หรือ 5m on"
-      (keydown.enter)="send()"
-    />
-    <button class="send-button" (click)="send()">
-      <span class="icon">📡</span>
-      ส่งคำสั่ง
-    </button>
+  <!-- Toggle Button for ON/OFF -->
+  <div class="toggle-section">
+    <label class="toggle-label">สถานะอุปกรณ์:</label>
+    <div class="toggle-buttons">
+      <button
+        class="toggle-button"
+        [ngClass]="{'active': selectedAction === 'on'}"
+        (click)="selectedAction = 'on'"
+      >
+        <span class="toggle-icon">🟢</span>
+        เปิด (ON)
+      </button>
+      <button
+        class="toggle-button"
+        [ngClass]="{'active': selectedAction === 'off'}"
+        (click)="selectedAction = 'off'"
+      >
+        <span class="toggle-icon">🔴</span>
+        ปิด (OFF)
+      </button>
+    </div>
+  </div>
+
+  <!-- Time Input -->
+  <div class="input-section">
+    <label class="input-label">เวลา/ระยะเวลา:</label>
+    <div class="input-group">
+      <input
+        class="command-input"
+        [(ngModel)]="timeInput"
+        placeholder="ตัวอย่าง: 20:30, 5s, 5m, 2h หรือ 5 (นาที)"
+        (keydown.enter)="send()"
+      />
+      <button class="send-button" (click)="send()">
+        <span class="icon">📡</span>
+        ส่งคำสั่ง
+      </button>
+    </div>
+  </div>
+
+  <!-- Command Preview -->
+  <div class="preview-section" *ngIf="timeInput && selectedAction">
+    <span class="preview-label">คำสั่งที่จะส่ง:</span>
+    <span class="preview-command">{{ timeInput }} {{ selectedAction }}</span>
   </div>
 
   <div style="margin-top: 20px; font-size: 0.9rem; color: #718096;">
-    📋 รูปแบบคำสั่ง: เวลา + สถานะ (เช่น 08:30 on, 5s off, 5m on, 2h off)
+    📋 รูปแบบเวลา: HH:MM (เช่น 08:30), จำนวน+หน่วย (เช่น 5s, 5m, 2h) หรือตัวเลข (เช่น 5 = 5 นาที)
   </div>
 </div>
 
