@@ -1,3 +1,29 @@
 <div class="app-container">
-  <router-outlet />
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button
+      class="tab-button"
+      [ngClass]="{'active': activeTab === 'control'}"
+      (click)="setActiveTab('control')"
+    >
+      <span class="tab-icon">🎛️</span>
+      ควบคุม
+    </button>
+    <button
+      class="tab-button"
+      [ngClass]="{'active': activeTab === 'status'}"
+      (click)="setActiveTab('status')"
+    >
+      <span class="tab-icon">📊</span>
+      สถานะ
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <app-farm-control [ngStyle]="{'display': activeTab === 'control' ? 'block' : 'none'}"></app-farm-control>
+    <app-farm-status [ngStyle]="{'display': activeTab === 'status' ? 'block' : 'none'}"></app-farm-status>
+  </div>
+
+  <!-- <router-outlet /> -->
 </div>

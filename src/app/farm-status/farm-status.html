@@ -1,0 +1,74 @@
+<div class="farm-status-card">
+  <h2 class="title">📊 สถานะฟาร์ม</h2>
+
+  <!-- MQTT Connection Status -->
+  <div class="connection-section">
+    <div class="status-item">
+      <span class="status-icon">{{ getConnectionIcon() }}</span>
+      <div class="status-info">
+        <span class="status-label">การเชื่อมต่อ:</span>
+        <span class="status-value" [ngClass]="{'online': isConnected, 'offline': !isConnected}">
+          {{ getConnectionText() }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESP Board Status -->
+  <div class="board-section">
+    <div class="status-item">
+      <span class="status-icon">{{ getStatusIcon() }}</span>
+      <div class="status-info">
+        <span class="status-label">ESP Board:</span>
+        <span class="status-value" [ngClass]="boardStatus">
+          {{ getStatusText() }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Last Update -->
+  <div class="update-section" *ngIf="lastUpdate">
+    <div class="last-update">
+      <span class="update-icon">🕒</span>
+      <span class="update-text">อัปเดตล่าสุด: {{ lastUpdate }}</span>
+    </div>
+  </div>
+
+  <!-- Status Cards -->
+  <div class="status-cards">
+    <!-- MQTT Connection Card -->
+    <div class="status-card" [ngClass]="{'online': isConnected, 'offline': !isConnected}">
+      <div class="card-icon">{{ getConnectionIcon() }}</div>
+      <div class="card-title">MQTT</div>
+      <div class="card-status">{{ getConnectionText() }}</div>
+    </div>
+
+    <!-- ESP Board Card -->
+    <div class="status-card" [ngClass]="boardStatus">
+      <div class="card-icon">{{ getStatusIcon() }}</div>
+      <div class="card-title">บอร์ด ESP</div>
+      <div class="card-status">{{ getStatusText() }}</div>
+    </div>
+  </div>
+
+  <!-- Device Status Section -->
+  <div class="devices-section" *ngIf="devices.length > 0">
+    <h3 class="section-title">🔧 สถานะอุปกรณ์</h3>
+
+    <div class="device-grid">
+      <div class="device-card"
+           *ngFor="let device of devices"
+           [ngClass]="device.status">
+        <div class="device-header">
+          <span class="device-icon">{{ getDeviceIcon(device.status) }}</span>
+          <span class="device-name">{{ getDeviceDisplayName(device.device) }}</span>
+        </div>
+        <div class="device-status">{{ getDeviceStatusText(device.status) }}</div>
+        <div class="device-update" *ngIf="device.lastUpdate">
+          <small>{{ device.lastUpdate }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
