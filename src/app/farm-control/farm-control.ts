@@ -15,6 +15,9 @@ export class FarmControl {
   command = '';
   timeInput = '';
   selectedAction: 'on' | 'off' = 'on';
+  selectedDate = '';
+  selectedTime = '';
+  inputMode: 'duration' | 'datetime' = 'duration';
   showNotification = false;
   notificationMessage = '';
   notificationType: 'success' | 'error' = 'success';
@@ -33,6 +36,34 @@ export class FarmControl {
     return timePattern.test(time.trim()) ||
            durationPattern.test(time.trim()) ||
            numberOnlyPattern.test(time.trim());
+  }
+
+  private isValidDateTime(): boolean {
+    return this.selectedDate !== '' && this.selectedTime !== '';
+  }
+
+  private formatDateTime(): string {
+    if (!this.selectedDate || !this.selectedTime) return '';
+    
+    // แปลงจาก YYYY-MM-DD เป็น DD/MM/YYYY
+    const dateParts = this.selectedDate.split('-');
+    const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+    
+    return `${formattedDate} ${this.selectedTime}`;
+  }
+
+  getPreviewCommand(): string {
+    if (this.inputMode === 'duration' && this.timeInput && this.selectedAction) {
+      let processedTime = this.timeInput.trim();
+      if (/^\d+$/.test(processedTime)) {
+        processedTime = processedTime + 'm';
+      }
+      return `${processedTime} ${this.selectedAction}`;
+    } else if (this.inputMode === 'datetime' && this.selectedDate && this.selectedTime && this.selectedAction) {
+      const formattedDateTime = this.formatDateTime();
+      return `${formattedDateTime} ${this.selectedAction}`;
+    }
+    return '';
   }  private showPopup(message: string, type: 'success' | 'error') {
     this.notificationMessage = message;
     this.notificationType = type;
@@ -45,6 +76,14 @@ export class FarmControl {
   }
 
   send() {
+    if (this.inputMode === 'duration') {
+      this.sendDurationCommand();
+    } else {
+      this.sendDateTimeCommand();
+    }
+  }
+
+  private sendDurationCommand() {
     const trimmedTime = this.timeInput.trim();
 
     if (!trimmedTime) {
@@ -68,6 +107,24 @@ export class FarmControl {
       this.mqttService.publish('myhome/led', fullCommand);
       this.showPopup('ส่งคำสั่งสำเร็จ! 📡', 'success');
       this.timeInput = '';
+    } catch (error) {
+      this.showPopup('เกิดข้อผิดพลาดในการส่งคำสั่ง', 'error');
+    }
+  }
+
+  private sendDateTimeCommand() {
+    if (!this.isValidDateTime()) {
+      this.showPopup('กรุณาเลือกวันที่และเวลา', 'error');
+      return;
+    }
+
+    try {
+      const formattedDateTime = this.formatDateTime();
+      const fullCommand = `${formattedDateTime} ${this.selectedAction}`;
+      this.mqttService.publish('myhome/led', fullCommand);
+      this.showPopup('ส่งคำสั่งสำเร็จ! 📡', 'success');
+      this.selectedDate = '';
+      this.selectedTime = '';
     } catch (error) {
       this.showPopup('เกิดข้อผิดพลาดในการส่งคำสั่ง', 'error');
     }

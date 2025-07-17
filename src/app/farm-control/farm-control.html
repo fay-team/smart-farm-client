@@ -4,11 +4,34 @@
     ควบคุมอุปกรณ์ในฟาร์มอัจฉริยะผ่าน MQTT
   </p>
 
+  <!-- Mode Selection -->
+  <div class="mode-section">
+    <label class="mode-label">เลือกรูปแบบการตั้งเวลา:</label>
+    <div class="mode-buttons">
+      <button 
+        class="mode-button"
+        [ngClass]="{'active': inputMode === 'duration'}"
+        (click)="inputMode = 'duration'"
+      >
+        <span class="mode-icon">⏱️</span>
+        ระยะเวลา
+      </button>
+      <button 
+        class="mode-button"
+        [ngClass]="{'active': inputMode === 'datetime'}"
+        (click)="inputMode = 'datetime'"
+      >
+        <span class="mode-icon">📅</span>
+        วันที่-เวลา
+      </button>
+    </div>
+  </div>
+
   <!-- Toggle Button for ON/OFF -->
   <div class="toggle-section">
     <label class="toggle-label">สถานะอุปกรณ์:</label>
     <div class="toggle-buttons">
-      <button
+      <button 
         class="toggle-button"
         [ngClass]="{'active': selectedAction === 'on'}"
         (click)="selectedAction = 'on'"
@@ -16,7 +39,7 @@
         <span class="toggle-icon">🟢</span>
         เปิด (ON)
       </button>
-      <button
+      <button 
         class="toggle-button"
         [ngClass]="{'active': selectedAction === 'off'}"
         (click)="selectedAction = 'off'"
@@ -27,8 +50,8 @@
     </div>
   </div>
 
-  <!-- Time Input -->
-  <div class="input-section">
+  <!-- Duration Input Mode -->
+  <div class="input-section" *ngIf="inputMode === 'duration'">
     <label class="input-label">เวลา/ระยะเวลา:</label>
     <div class="input-group">
       <input
@@ -44,18 +67,47 @@
     </div>
   </div>
 
+  <!-- DateTime Input Mode -->
+  <div class="datetime-section" *ngIf="inputMode === 'datetime'">
+    <div class="datetime-inputs">
+      <div class="datetime-group">
+        <label class="input-label">วันที่:</label>
+        <input
+          type="date"
+          class="date-input"
+          [(ngModel)]="selectedDate"
+        />
+      </div>
+      <div class="datetime-group">
+        <label class="input-label">เวลา:</label>
+        <input
+          type="time"
+          class="time-input"
+          [(ngModel)]="selectedTime"
+        />
+      </div>
+    </div>
+    <button class="send-button full-width" (click)="send()">
+      <span class="icon">📡</span>
+      ส่งคำสั่ง
+    </button>
+  </div>
+
   <!-- Command Preview -->
-  <div class="preview-section" *ngIf="timeInput && selectedAction">
+  <div class="preview-section" *ngIf="getPreviewCommand()">
     <span class="preview-label">คำสั่งที่จะส่ง:</span>
-    <span class="preview-command">{{ timeInput }} {{ selectedAction }}</span>
+    <span class="preview-command">{{ getPreviewCommand() }}</span>
   </div>
 
   <div style="margin-top: 20px; font-size: 0.9rem; color: #718096;">
-    📋 รูปแบบเวลา: HH:MM (เช่น 08:30), จำนวน+หน่วย (เช่น 5s, 5m, 2h) หรือตัวเลข (เช่น 5 = 5 นาที)
+    <span *ngIf="inputMode === 'duration'">
+      📋 รูปแบบเวลา: HH:MM (เช่น 08:30), จำนวน+หน่วย (เช่น 5s, 5m, 2h) หรือตัวเลข (เช่น 5 = 5 นาที)
+    </span>
+    <span *ngIf="inputMode === 'datetime'">
+      📋 เลือกวันที่และเวลาที่ต้องการให้อุปกรณ์ทำงาน
+    </span>
   </div>
-</div>
-
-<!-- Popup Notification - อยู่นอก card เพื่อให้ relative กับหน้าจอ -->
+</div><!-- Popup Notification - อยู่นอก card เพื่อให้ relative กับหน้าจอ -->
 <div
   *ngIf="showNotification"
   class="notification"

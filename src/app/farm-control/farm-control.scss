@@ -113,27 +113,93 @@
     padding: 30px 20px;
     margin: 20px;
   }
-
+  
   .input-group {
     flex-direction: column;
   }
-
+  
   .command-input {
     min-width: auto;
   }
-
+  
   .title {
     font-size: 1.5rem;
   }
-
+  
   .toggle-buttons {
     flex-direction: column;
   }
-
+  
   .toggle-button {
     max-width: none;
   }
-}/* Toggle Section */
+  
+  .mode-buttons {
+    flex-direction: column;
+  }
+  
+  .mode-button {
+    max-width: none;
+  }
+  
+  .datetime-inputs {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}/* Mode Selection */
+.mode-section {
+  margin-bottom: 25px;
+}
+
+.mode-label {
+  display: block;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.mode-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.mode-button {
+  flex: 1;
+  max-width: 160px;
+  padding: 12px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #4a5568;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  &:hover {
+    border-color: #cbd5e0;
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-1px);
+  }
+  
+  &.active {
+    border-color: #38a169;
+    background: linear-gradient(135deg, #38a169, #2f855a);
+    color: white;
+    box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+  }
+}
+
+.mode-icon {
+  font-size: 1.1rem;
+}
+
+/* Toggle Section */
 .toggle-section {
   margin-bottom: 25px;
 }
@@ -197,6 +263,44 @@
   color: #2d3748;
   margin-bottom: 12px;
   font-size: 1rem;
+}
+
+/* DateTime Section */
+.datetime-section {
+  margin-bottom: 20px;
+}
+
+.datetime-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.datetime-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-input, .time-input {
+  padding: 16px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 1);
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 10px;
 }
 
 /* Preview Section */
