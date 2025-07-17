@@ -27,9 +27,9 @@ export class FarmStatus implements OnInit, OnDestroy {
   ngOnInit() {
     // ตรวจสอบสถานะเชื่อมต่อเริ่มต้น
     this.isConnected = this.mqttService.isConnected();
-    
+
     this.subscribeToStatus();
-    
+
     // ตรวจสอบสถานะการเชื่อมต่อทุกๆ 2 วินาที
     this.connectionCheckInterval = setInterval(() => {
       const currentStatus = this.mqttService.isConnected();
@@ -42,7 +42,7 @@ export class FarmStatus implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.mqttService.unsubscribe('myhome/status');
-    
+
     // ล้าง interval
     if (this.connectionCheckInterval) {
       clearInterval(this.connectionCheckInterval);

@@ -95,7 +95,7 @@ export class MqttService {
   onConnect(callback: () => void) {
     // เพิ่ม callback ลงใน array
     this.connectCallbacks.push(callback);
-    
+
     // ถ้าเชื่อมต่ออยู่แล้ว ให้เรียก callback ทันที
     if (this.client.connected) {
       callback();
