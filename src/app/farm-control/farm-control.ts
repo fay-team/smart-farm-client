@@ -44,11 +44,11 @@ export class FarmControl {
 
   private formatDateTime(): string {
     if (!this.selectedDate || !this.selectedTime) return '';
-    
+
     // แปลงจาก YYYY-MM-DD เป็น DD/MM/YYYY
     const dateParts = this.selectedDate.split('-');
     const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
-    
+
     return `${formattedDate} ${this.selectedTime}`;
   }
 

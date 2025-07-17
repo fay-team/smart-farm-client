@@ -8,7 +8,7 @@
   <div class="mode-section">
     <label class="mode-label">เลือกรูปแบบการตั้งเวลา:</label>
     <div class="mode-buttons">
-      <button 
+      <button
         class="mode-button"
         [ngClass]="{'active': inputMode === 'duration'}"
         (click)="inputMode = 'duration'"
@@ -16,7 +16,7 @@
         <span class="mode-icon">⏱️</span>
         ระยะเวลา
       </button>
-      <button 
+      <button
         class="mode-button"
         [ngClass]="{'active': inputMode === 'datetime'}"
         (click)="inputMode = 'datetime'"
@@ -31,7 +31,7 @@
   <div class="toggle-section">
     <label class="toggle-label">สถานะอุปกรณ์:</label>
     <div class="toggle-buttons">
-      <button 
+      <button
         class="toggle-button"
         [ngClass]="{'active': selectedAction === 'on'}"
         (click)="selectedAction = 'on'"
@@ -39,7 +39,7 @@
         <span class="toggle-icon">🟢</span>
         เปิด (ON)
       </button>
-      <button 
+      <button
         class="toggle-button"
         [ngClass]="{'active': selectedAction === 'off'}"
         (click)="selectedAction = 'off'"

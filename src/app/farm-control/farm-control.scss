@@ -113,35 +113,35 @@
     padding: 30px 20px;
     margin: 20px;
   }
-  
+
   .input-group {
     flex-direction: column;
   }
-  
+
   .command-input {
     min-width: auto;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
-  
+
   .toggle-buttons {
     flex-direction: column;
   }
-  
+
   .toggle-button {
     max-width: none;
   }
-  
+
   .mode-buttons {
     flex-direction: column;
   }
-  
+
   .mode-button {
     max-width: none;
   }
-  
+
   .datetime-inputs {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -180,13 +180,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  
+
   &:hover {
     border-color: #cbd5e0;
     background: rgba(255, 255, 255, 0.95);
     transform: translateY(-1px);
   }
-  
+
   &.active {
     border-color: #38a169;
     background: linear-gradient(135deg, #38a169, #2f855a);
@@ -289,7 +289,7 @@
   font-size: 1rem;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.8);
-  
+
   &:focus {
     outline: none;
     border-color: #667eea;
