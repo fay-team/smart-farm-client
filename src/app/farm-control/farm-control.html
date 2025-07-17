@@ -1,0 +1,8 @@
+<h2>สั่งงานอุปกรณ์ (ผ่าน HiveMQ)</h2>
+
+<input
+  [(ngModel)]="command"
+  placeholder="เช่น 20:30 on หรือ 5m off"
+  style="width: 300px;"
+/>
+<button (click)="send()">ส่งคำสั่ง</button>
