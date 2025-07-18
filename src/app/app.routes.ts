@@ -1,9 +1,18 @@
 import { Routes } from '@angular/router';
-import { FarmControl } from './farm-control/farm-control';
+import { Dashboard } from './dashboard/dashboard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: FarmControl
+    redirectTo: '/dashboard',
+    pathMatch: 'full'
+  },
+  {
+    path: 'dashboard',
+    component: Dashboard
+  },
+  {
+    path: '**',
+    redirectTo: '/dashboard'
   }
 ];
