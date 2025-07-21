@@ -24,6 +24,7 @@ export class FarmStatus implements OnInit, OnDestroy {
   isConnected = false;
   private connectionCheckInterval: any;
   private statusSubscription: any;
+  private requestStatusSubscription: any;
 
   constructor(private mqttService: MqttService) {}
 
@@ -66,6 +67,9 @@ export class FarmStatus implements OnInit, OnDestroy {
     if (this.statusSubscription) {
       this.statusSubscription.unsubscribe();
     }
+    if (this.requestStatusSubscription) {
+      this.requestStatusSubscription.unsubscribe();
+    }
 
     // ล้าง interval
     if (this.connectionCheckInterval) {
@@ -91,7 +95,7 @@ export class FarmStatus implements OnInit, OnDestroy {
   private requestCurrentStatus() {
     // ส่งคำขอให้ ESP ส่ง status ปัจจุบัน
     console.log('📤 Requesting current pump status...');
-    this.mqttService.publish('myhome/request', JSON.stringify({
+    this.mqttService.publish('myhome/request/status', JSON.stringify({
       action: 'get_status',
       timestamp: new Date().toISOString()
     }));
@@ -102,7 +106,11 @@ export class FarmStatus implements OnInit, OnDestroy {
     if (this.statusSubscription) {
       this.statusSubscription.unsubscribe();
     }
+    if (this.requestStatusSubscription) {
+      this.requestStatusSubscription.unsubscribe();
+    }
 
+    // Subscribe to regular status updates
     this.statusSubscription = this.mqttService.subscribe('myhome/status', (topic: string, message: string) => {
       console.log("📥 Received status message:", message);
       this.handleStatusMessage(message);
