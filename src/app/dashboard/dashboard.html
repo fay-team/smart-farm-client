@@ -21,7 +21,7 @@
 
   <!-- Tab Content -->
   <div class="tab-content">
-    <app-farm-control [ngStyle]="{'display': activeTab === 'control' ? 'block' : 'none'}"></app-farm-control>
-    <app-farm-status [ngStyle]="{'display': activeTab === 'status' ? 'block' : 'none'}"></app-farm-status>
+    <app-farm-control *ngIf="activeTab === 'control'"></app-farm-control>
+    <app-farm-status *ngIf="activeTab === 'status'"></app-farm-status>
   </div>
 </div>

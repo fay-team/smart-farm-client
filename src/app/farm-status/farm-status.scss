@@ -185,6 +185,72 @@
   }
 }
 
+/* Mobile responsive styles */
+@media (max-width: 480px) {
+  /* Center the card on screen */
+  :host {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    min-height: calc(100vh - 80px) !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+  }
+  
+  .farm-status-card {
+    width: calc(100% - 20px) !important;
+    max-width: 400px !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  
+  .status-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    width: 100% !important;
+  }
+  
+  .status-card {
+    width: 100% !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
+  }
+  
+  .device-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  
+  .device-card {
+    width: 100% !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* iPhone 12 Pro specific */
+@media (max-width: 390px) {
+  :host {
+    padding: 5px !important;
+    min-height: calc(100vh - 70px) !important;
+  }
+  
+  .farm-status-card {
+    width: calc(100% - 10px) !important;
+    max-width: 380px !important;
+    margin: 10px auto !important;
+    padding: 16px !important;
+  }
+}
+
 // Device Status Styles
 .devices-section {
   margin-top: 30px;

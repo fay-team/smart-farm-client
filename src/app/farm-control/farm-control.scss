@@ -146,7 +146,124 @@
     grid-template-columns: 1fr;
     gap: 12px;
   }
-}/* Mode Selection */
+}
+
+/* Mobile responsive styles */
+@media (max-width: 480px) {
+  /* Center the card on screen */
+  :host {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    min-height: calc(100vh - 80px) !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .farm-control-card {
+    width: calc(100% - 20px) !important;
+    max-width: 400px !important;
+    margin: 20px auto !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  .toggle-section,
+  .datetime-section,
+  .preview-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .toggle-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+  .toggle-button {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 18px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .toggle-icon {
+    font-size: 20px !important;
+  }
+
+  .datetime-inputs {
+    flex-direction: column !important;
+    gap: 15px !important;
+    width: 100% !important;
+  }
+
+  .datetime-group {
+    width: 100% !important;
+  }
+
+  .date-input,
+  .time-input {
+    width: 100% !important;
+    font-size: 16px !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .send-button {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 15px !important;
+    padding: 18px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* iPhone 12 Pro specific */
+@media (max-width: 390px) {
+  :host {
+    padding: 5px !important;
+    min-height: calc(100vh - 70px) !important;
+  }
+
+  .farm-control-card {
+    width: calc(100% - 10px) !important;
+    max-width: 380px !important;
+    margin: 10px auto !important;
+    padding: 16px !important;
+  }
+
+  .title {
+    font-size: 1.2rem !important;
+  }
+
+  .toggle-button,
+  .send-button {
+    padding: 20px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Mode Selection */
 .mode-section {
   margin-bottom: 25px;
 }
