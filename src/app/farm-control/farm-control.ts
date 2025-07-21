@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MqttService } from '../service/mqtt';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   providers: [MqttService]
 })
-export class FarmControl {
+export class FarmControl implements OnInit, OnDestroy {
   selectedAction: 'on' | 'off' = 'on';
   selectedDate = '';
   selectedTime = '';
@@ -23,6 +23,14 @@ export class FarmControl {
     // ตั้งค่า default วันที่เป็นวันปัจจุบัน
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+  }
+
+  ngOnInit() {
+    // Remove selectedSeconds initialization
+  }
+
+  ngOnDestroy() {
+    // Clean up logic if needed
   }
 
   private isValidDateTime(): boolean {
@@ -40,11 +48,11 @@ export class FarmControl {
   }
 
   getPreviewCommand(): string {
-    if (this.selectedDate && this.selectedTime && this.selectedAction) {
-      const formattedDateTime = this.formatDateTime();
-      return `${formattedDateTime} ${this.selectedAction}`;
+    if (!this.selectedDate || !this.selectedTime) {
+      return '';
     }
-    return '';
+
+    return `${this.selectedDate} ${this.selectedTime} ${this.selectedAction}`;
   }
 
   private showPopup(message: string, type: 'success' | 'error') {
@@ -59,15 +67,15 @@ export class FarmControl {
   }
 
   send() {
-    if (!this.isValidDateTime()) {
+    if (!this.selectedDate || !this.selectedTime) {
       this.showPopup('กรุณาเลือกวันที่และเวลา', 'error');
       return;
     }
 
+    const command = `${this.selectedDate} ${this.selectedTime} ${this.selectedAction}`;
+
     try {
-      const formattedDateTime = this.formatDateTime();
-      const fullCommand = `${formattedDateTime} ${this.selectedAction}`;
-      this.mqttService.publish('myhome/led', fullCommand);
+      this.mqttService.publish('myhome/led', command);
       this.showPopup('ส่งคำสั่งสำเร็จ! 📡', 'success');
       this.selectedTime = '';
     } catch (error) {
