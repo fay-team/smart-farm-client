@@ -16,7 +16,10 @@ interface DeviceStatus {
   standalone: true
 })
 export class FarmStatus implements OnInit, OnDestroy {
-  devices: DeviceStatus[] = [];
+  devices: DeviceStatus[] = [
+    { device: 'pump01', status: 'unknown', lastUpdate: '' },
+    { device: 'pump02', status: 'unknown', lastUpdate: '' }
+  ];
   boardStatus: 'online' | 'offline' | 'unknown' = 'unknown';
   lastUpdate = '';
   isConnected = false;
@@ -70,15 +73,19 @@ export class FarmStatus implements OnInit, OnDestroy {
     try {
       const data = JSON.parse(message);
 
-      // ถ้ามี device ระบุมาด้วย
-      if (data.device && data.status) {
-        this.updateDeviceStatus(data.device, data.status);
+      // รับข้อมูล status ของปั้ม
+      if (data.name && data.status) {
+        this.updatePumpStatus(data.name, data.status);
+      } else if (data.device && data.status) {
+        // รองรับ format เดิม
+        this.updatePumpStatus(data.device, data.status);
       } else if (data.status) {
-        // ถ้าไม่มี device ให้ถือว่าเป็น board status
+        // ถ้าไม่มี device/name ให้ถือว่าเป็น board status
         this.boardStatus = data.status === 'online' ? 'online' : 'offline';
         this.lastUpdate = new Date().toLocaleString('th-TH');
       }
     } catch (error) {
+      console.log('📋 Raw message (not JSON):', message);
       // ถ้าไม่ใช่ JSON ให้ใช้ message โดยตรง
       if (message.toLowerCase().includes('online')) {
         this.boardStatus = 'online';
@@ -89,24 +96,25 @@ export class FarmStatus implements OnInit, OnDestroy {
     }
   }
 
-  private updateDeviceStatus(deviceName: string, status: string) {
-    const deviceStatus: 'online' | 'offline' | 'unknown' =
+  private updatePumpStatus(pumpName: string, status: string) {
+    // รองรับเฉพาะ pump01 และ pump02
+    if (pumpName !== 'pump01' && pumpName !== 'pump02') {
+      console.log(`⚠️ Unknown pump: ${pumpName}`);
+      return;
+    }
+
+    const pumpStatus: 'online' | 'offline' | 'unknown' =
       status === 'online' ? 'online' :
       status === 'offline' ? 'offline' : 'unknown';
 
-    const existingDeviceIndex = this.devices.findIndex(d => d.device === deviceName);
+    const pumpIndex = this.devices.findIndex(d => d.device === pumpName);
 
-    if (existingDeviceIndex >= 0) {
-      // อัปเดตอุปกรณ์ที่มีอยู่
-      this.devices[existingDeviceIndex].status = deviceStatus;
-      this.devices[existingDeviceIndex].lastUpdate = new Date().toLocaleString('th-TH');
-    } else {
-      // เพิ่มอุปกรณ์ใหม่
-      this.devices.push({
-        device: deviceName,
-        status: deviceStatus,
-        lastUpdate: new Date().toLocaleString('th-TH')
-      });
+    if (pumpIndex >= 0) {
+      // อัปเดตสถานะปั้ม
+      this.devices[pumpIndex].status = pumpStatus;
+      this.devices[pumpIndex].lastUpdate = new Date().toLocaleString('th-TH');
+
+      console.log(`🔄 Updated ${pumpName} status to: ${pumpStatus}`);
     }
 
     // อัปเดต lastUpdate ทั่วไป
@@ -154,17 +162,10 @@ export class FarmStatus implements OnInit, OnDestroy {
   }
 
   getDeviceDisplayName(device: string): string {
-    // แปลงชื่ออุปกรณ์เป็นภาษาไทยหรือชื่อที่อ่านง่าย
+    // แสดงชื่อปั้มเป็นภาษาไทย
     const deviceNames: { [key: string]: string } = {
       'pump01': 'ปั๊มน้ำ 1',
-      'pump02': 'ปั๊มน้ำ 2',
-      'pump03': 'ปั๊มน้ำ 3',
-      'sensor01': 'เซ็นเซอร์ 1',
-      'sensor02': 'เซ็นเซอร์ 2',
-      'fan01': 'พัดลม 1',
-      'fan02': 'พัดลม 2',
-      'light01': 'ไฟ 1',
-      'light02': 'ไฟ 2'
+      'pump02': 'ปั๊มน้ำ 2'
     };
 
     return deviceNames[device] || device;

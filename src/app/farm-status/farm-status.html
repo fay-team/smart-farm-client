@@ -14,19 +14,6 @@
     </div>
   </div>
 
-  <!-- ESP Board Status -->
-  <div class="board-section">
-    <div class="status-item">
-      <span class="status-icon">{{ getStatusIcon() }}</span>
-      <div class="status-info">
-        <span class="status-label">ESP Board:</span>
-        <span class="status-value" [ngClass]="boardStatus">
-          {{ getStatusText() }}
-        </span>
-      </div>
-    </div>
-  </div>
-
   <!-- Last Update -->
   <div class="update-section" *ngIf="lastUpdate">
     <div class="last-update">
@@ -42,13 +29,6 @@
       <div class="card-icon">{{ getConnectionIcon() }}</div>
       <div class="card-title">MQTT</div>
       <div class="card-status">{{ getConnectionText() }}</div>
-    </div>
-
-    <!-- ESP Board Card -->
-    <div class="status-card" [ngClass]="boardStatus">
-      <div class="card-icon">{{ getStatusIcon() }}</div>
-      <div class="card-title">บอร์ด ESP</div>
-      <div class="card-status">{{ getStatusText() }}</div>
     </div>
   </div>
 
